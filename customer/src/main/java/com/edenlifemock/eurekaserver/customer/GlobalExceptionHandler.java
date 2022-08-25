@@ -1,4 +1,4 @@
-package com.edenlifemock.customer;
+package com.edenlifemock.eurekaserver.customer;
 
 import com.fasterxml.classmate.members.ResolvedParameterizedMember;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.edenlifemock.notification;
+package com.edenlifemock.eurekaserver.notification;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.*;
 public class NotificationController {
     private final NotificationService notificationService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> sendNotification(@PathVariable Long id){
-        log.info("Sending notification to {}",id);
-        return new ResponseEntity<>(notificationService.sendNotification(id), HttpStatus.OK);
+    @GetMapping("/{name}")
+    public ResponseEntity<?> sendNotification(@PathVariable String name){
+        log.info("Sending notification to {}",name);
+        return new ResponseEntity<>(notificationService.sendNotification(name), HttpStatus.OK);
     }
 
 

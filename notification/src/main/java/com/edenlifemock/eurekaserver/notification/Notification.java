@@ -1,4 +1,4 @@
-package com.edenlifemock.notification;
+package com.edenlifemock.eurekaserver.notification;
 
 import lombok.*;
 

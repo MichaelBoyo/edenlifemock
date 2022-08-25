@@ -1,4 +1,4 @@
-package com.edenlifemock.customer;
+package com.edenlifemock.eurekaserver.customer;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package com.edenlifemock.customer;
+package com.edenlifemock.eurekaserver.customer;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

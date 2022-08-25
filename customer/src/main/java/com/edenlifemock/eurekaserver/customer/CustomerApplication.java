@@ -1,11 +1,11 @@
-package com.edenlifemock.notification;
+package com.edenlifemock.eurekaserver.customer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class NotificationApplication {
+public class CustomerApplication {
     public static void main(String[] args) {
-        SpringApplication.run(NotificationApplication.class,args);
+        SpringApplication.run(CustomerApplication.class,args);
     }
 }

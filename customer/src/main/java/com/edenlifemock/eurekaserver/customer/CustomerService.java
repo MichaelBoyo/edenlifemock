@@ -1,4 +1,4 @@
-package com.edenlifemock.customer;
+package com.edenlifemock.eurekaserver.customer;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,9 +30,7 @@ public class CustomerService implements iCustomerService{
         NotificationResponse resp = restTemplate.getForObject(
                 "http://localhost:8081/api/v1/notification/{id}",
                 NotificationResponse.class,
-                customer.getId()
-
-
+                customer.getFirstName() + " " + customer.getLastName()
         );
         return customer;
     }
