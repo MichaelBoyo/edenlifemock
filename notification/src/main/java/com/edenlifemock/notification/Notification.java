@@ -20,7 +20,7 @@ public class Notification {
             strategy = GenerationType.SEQUENCE,
             generator = "customer_id_sequence"
     )
-    private Long id;
+    private Long notificationId;
     private String message;
 
 }

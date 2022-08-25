@@ -2,12 +2,14 @@ package com.edenlifemock.customer;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 @AllArgsConstructor
 public class CustomerService implements iCustomerService{
     private final CustomerRepository customerRepository;
 
+    private final RestTemplate restTemplate;
 //    private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -23,6 +25,15 @@ public class CustomerService implements iCustomerService{
                 .email(customerRequest.email())
                 .password(customerRequest.password())
                 .build();
-        return customerRepository.saveAndFlush(customer);
+        customerRepository.saveAndFlush(customer);
+
+        NotificationResponse resp = restTemplate.getForObject(
+                "http://localhost:8081/api/v1/notification/{id}",
+                NotificationResponse.class,
+                customer.getId()
+
+
+        );
+        return customer;
     }
 }
