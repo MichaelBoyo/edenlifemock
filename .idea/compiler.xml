@@ -7,16 +7,16 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="cleaning" />
         <module name="notification" />
+        <module name="clients" />
         <module name="eureka-server" />
+        <module name="laundry" />
         <module name="customer" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="api-gateway" target="18" />
-      <module name="cleaning" target="18" />
-      <module name="clients" target="18" />
-      <module name="laundry" target="18" />
     </bytecodeTargetLevel>
   </component>
 </project>
