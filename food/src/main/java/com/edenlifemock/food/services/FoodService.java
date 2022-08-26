@@ -20,4 +20,5 @@ public interface FoodService {
 
     FoodResponse updateMeal(UpdateMealRequest updateLaundryOrderRequest);
 
+    FoodResponse getMealByName(String mealName);
 }

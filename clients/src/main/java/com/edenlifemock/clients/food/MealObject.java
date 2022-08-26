@@ -7,6 +7,6 @@ public record MealObject(
          String mealName,
          String type,
          String desc,
-         BigDecimal price
+         Double price
 ) {
 }

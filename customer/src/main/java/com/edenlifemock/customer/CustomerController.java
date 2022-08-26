@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/v1")
 @AllArgsConstructor
@@ -15,10 +17,16 @@ import org.springframework.web.bind.annotation.*;
 public class CustomerController {
     private final iCustomerService iCustomerService;
 
-    @PostMapping("customers")
+    @PostMapping("/customers")
     public NotificationResponse registerUser(@RequestBody CustomerRequest customerRequest){
         log.info("registering customer {}",customerRequest);
         return iCustomerService.saveCustomer(customerRequest);
+    }
+
+    @GetMapping("/customers")
+    public List<CustomerResponse> getAllCustomers(){
+        log.info("fetching all customers");
+        return iCustomerService.getAllCustomers();
     }
 
     @GetMapping("/laundry")
@@ -38,5 +46,6 @@ public class CustomerController {
         log.info("food order in process {}",orderFoodRequest);
         return iCustomerService.orderMeal(orderFoodRequest);
     }
+
 
 }

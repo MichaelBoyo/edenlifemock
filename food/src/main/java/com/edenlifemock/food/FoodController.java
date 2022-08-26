@@ -18,17 +18,21 @@ public class FoodController {
     private final FoodService foodService;
 
     @PostMapping
-    public FoodResponse addMeal(MealObject mealObject) {
+    public FoodResponse addMeal(@RequestBody MealObject mealObject) {
         return foodService.addMeal(mealObject);
     }
 
-    @GetMapping
-    public MealObject getMeal(Long id) {
-        return foodService.getMeal(id);
+//    @GetMapping("/{id}")
+//    public MealObject getMeal(@PathVariable Long id) {
+//        return foodService.getMeal(id);
+//    }
+    @GetMapping("/{mealName}")
+    FoodResponse getMealByName(@PathVariable("mealName") String mealName){
+        return foodService.getMealByName(mealName);
     }
 
-    @DeleteMapping
-    public FoodResponse removeMeal(Long mealId) {
+    @DeleteMapping("/{mealId}")
+    public FoodResponse removeMeal(@PathVariable Long mealId) {
         return foodService.removeMeal(mealId);
     }
 
@@ -38,7 +42,7 @@ public class FoodController {
     }
 
     @PatchMapping
-    FoodResponse updateMeal(UpdateMealRequest updateMealRequest) {
+    FoodResponse updateMeal(@RequestBody UpdateMealRequest updateMealRequest) {
         return foodService.updateMeal(updateMealRequest);
     }
 }

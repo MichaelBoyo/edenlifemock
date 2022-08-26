@@ -22,9 +22,10 @@ public class FoodServiceImpl implements FoodService {
     @Override
     public FoodResponse addMeal(MealObject mealObject) {
         isExist(mealObject.mealName());
+        log.info("adding meal {}",mealObject);
         mealRepository.saveAndFlush(Meal.builder()
                 .mealName(mealObject.mealName())
-                .desc(mealObject.desc())
+                .description(mealObject.desc())
                 .type(mealObject.type())
                 .price(mealObject.price())
                 .build());
@@ -39,7 +40,7 @@ public class FoodServiceImpl implements FoodService {
     @Override
     public MealObject getMeal(Long id) {
         return mealRepository.findById(id).map(meal -> new MealObject(meal.getMealId(), meal.getMealName(),
-                meal.getType(), meal.getDesc(), meal.getPrice())).orElseThrow(
+                meal.getType(), meal.getDescription(), meal.getPrice())).orElseThrow(
                 () -> new MealNotFoundException("meal with id {" + id + "} not found")
         );
     }
@@ -53,7 +54,7 @@ public class FoodServiceImpl implements FoodService {
     @Override
     public List<MealObject> getAllMeals() {
         return mealRepository.findAll().stream().map(meal -> new MealObject(meal.getMealId(), meal.getMealName(),
-                meal.getType(), meal.getDesc(), meal.getPrice())).toList();
+                meal.getType(), meal.getDescription(), meal.getPrice())).toList();
     }
 
 
@@ -61,10 +62,18 @@ public class FoodServiceImpl implements FoodService {
     public FoodResponse updateMeal(UpdateMealRequest updateMealRequest) {
         Meal meal = mealRepository.getById(updateMealRequest.mealId());
         if (isNotNullOrEmpty(updateMealRequest.mealName())) meal.setMealName(updateMealRequest.mealName());
-        if (isNotNullOrEmpty(updateMealRequest.desc())) meal.setDesc(updateMealRequest.desc());
+        if (isNotNullOrEmpty(updateMealRequest.desc())) meal.setDescription(updateMealRequest.desc());
         if (isNotNullOrEmpty(updateMealRequest.type())) meal.setType(updateMealRequest.type());
         if (isNotNullOrEmpty(String.valueOf(updateMealRequest.price()))) meal.setPrice(updateMealRequest.price());
         return new FoodResponse("updated successfully");
+    }
+
+    @Override
+    public FoodResponse getMealByName(String mealName) {
+        var meal = mealRepository.findMealByMealName(mealName);
+        MealObject mealObject = new MealObject(meal.getMealId(),meal.getMealName(),
+                meal.getType(),meal.getDescription(), meal.getPrice());
+        return new FoodResponse(mealObject+ " ordered successfully");
     }
 
 

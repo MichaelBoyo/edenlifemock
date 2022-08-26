@@ -3,7 +3,6 @@ package com.edenlifemock.customer;
 import com.edenlifemock.clients.cleaning.CleaningClient;
 import com.edenlifemock.clients.cleaning.CleaningOrderRequest;
 import com.edenlifemock.clients.food.FoodClient;
-import com.edenlifemock.clients.food.FoodResponse;
 import com.edenlifemock.clients.food.OrderFoodRequest;
 import com.edenlifemock.clients.laundry.LaundryClient;
 import com.edenlifemock.clients.laundry.LaundryOrderRequest;
@@ -17,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -72,12 +72,21 @@ public class CustomerService implements iCustomerService {
     }
 
     @Override
+    public List<CustomerResponse> getAllCustomers() {
+        return customerRepository.findAll().stream().map(customer -> new CustomerResponse(customer.getCustomerId(),
+                customer.getEmail(), customer.getFirstName(), customer.getLastName(), customer.getDateRegistered())).toList();
+    }
+
+    @Override
     public NotificationResponse orderLaundry(LaundryOrderRequest laundryOrderRequest) {
         isRegisteredUser(laundryOrderRequest.email());
+
+        var customer = customerRepository.findCustomerByEmail(laundryOrderRequest.email());
+
         var resp = laundryClient.createLaundryOrder(laundryOrderRequest);
 
         return notificationClient.sendNotification(new NotificationRequest(
-                laundryOrderRequest.customerId(),
+                customer.getCustomerId(),
                 laundryOrderRequest.customerName(),
                 resp.message(),
                 laundryOrderRequest.email()
@@ -95,9 +104,10 @@ public class CustomerService implements iCustomerService {
     public NotificationResponse orderCleaning(CleaningOrderRequest cleaningOrderRequest) {
         log.info("email-> {}", cleaningOrderRequest.email());
         isRegisteredUser(cleaningOrderRequest.email());
+        var customer = customerRepository.findCustomerByEmail(cleaningOrderRequest.email());
         var resp = cleaningClient.createLaundryOrder(cleaningOrderRequest);
         return notificationClient.sendNotification(new NotificationRequest(
-                cleaningOrderRequest.customerId(),
+                customer.getCustomerId(),
                 cleaningOrderRequest.customerName(),
                 resp.message(),
                 cleaningOrderRequest.email()
@@ -108,9 +118,10 @@ public class CustomerService implements iCustomerService {
     public NotificationResponse orderMeal(OrderFoodRequest orderFoodRequest) {
         log.info("ordering food-> {}", orderFoodRequest.email());
         isRegisteredUser(orderFoodRequest.email());
-        var resp = foodClient.orderMeal(orderFoodRequest.mealName());
+        var customer = customerRepository.findCustomerByEmail(orderFoodRequest.email());
+        var resp = foodClient.getMealByName(orderFoodRequest.mealName());
         return notificationClient.sendNotification(new NotificationRequest(
-                orderFoodRequest.customerId(),
+                customer.getCustomerId(),
                 orderFoodRequest.customerName(),
                 resp.message(),
                 orderFoodRequest.email()
