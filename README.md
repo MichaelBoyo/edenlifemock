@@ -1,4 +1,4 @@
 # edenlifemock
-Mock App of ouredenlofe.com
+Mock App of ouredenlife.com
 
 .....
