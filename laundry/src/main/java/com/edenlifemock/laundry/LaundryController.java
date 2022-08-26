@@ -20,7 +20,7 @@ public class LaundryController {
 
     @PostMapping
     public ResponseEntity<?> createLaundryOrder(@RequestBody LaundryOrderRequest laundryOrderRequest){
-        log.info("preparing order {}",laundryOrderRequest);
+        log.info("preparing laundry order {}",laundryOrderRequest);
         return new ResponseEntity<>(iLaundryService.createLaundryOrder(laundryOrderRequest), HttpStatus.OK);
     }
 }

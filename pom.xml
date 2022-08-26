@@ -18,6 +18,7 @@
         <module>clients</module>
         <module>laundry</module>
         <module>cleaning</module>
+        <module>food</module>
     </modules>
 
     <name>edenlifemock</name>

@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 public class LaundryOrder {
     @Id
     @SequenceGenerator(
-            name = "customer_id_sequence",
+            name = "laundry_order_id_sequence",
             sequenceName = "laundry_order_id_sequence"
     )
     @GeneratedValue(
