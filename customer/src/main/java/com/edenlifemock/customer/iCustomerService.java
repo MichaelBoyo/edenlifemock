@@ -1,9 +1,10 @@
 package com.edenlifemock.customer;
 
 import com.edenlifemock.clients.cleaning.CleaningOrderRequest;
+import com.edenlifemock.clients.food.FoodResponse;
+import com.edenlifemock.clients.food.OrderFoodRequest;
 import com.edenlifemock.clients.laundry.LaundryOrderRequest;
 import com.edenlifemock.clients.notification.NotificationResponse;
-import org.springframework.http.ResponseEntity;
 
 public interface iCustomerService {
     NotificationResponse saveCustomer(CustomerRequest customerRequest);
@@ -14,6 +15,6 @@ public interface iCustomerService {
 
     NotificationResponse orderCleaning(CleaningOrderRequest cleaningOrderRequest);
 
-
+    NotificationResponse orderMeal(OrderFoodRequest orderFoodRequest);
 
 }

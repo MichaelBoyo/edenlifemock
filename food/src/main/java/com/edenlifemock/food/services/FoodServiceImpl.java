@@ -1,64 +1,74 @@
 package com.edenlifemock.food.services;
 
+import com.edenlifemock.clients.food.FoodResponse;
+import com.edenlifemock.clients.food.MealObject;
+import com.edenlifemock.clients.food.UpdateMealRequest;
 import com.edenlifemock.food.MealRepository;
-import com.edenlifemock.food.dtos.FoodResponse;
-import com.edenlifemock.food.dtos.MealRequest;
-import com.edenlifemock.food.dtos.UpdateMealRequest;
+
 import com.edenlifemock.food.models.Meal;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+
 @Service
 @Slf4j
 @AllArgsConstructor
-public class FoodServiceImpl implements FoodService{
+public class FoodServiceImpl implements FoodService {
     private final MealRepository mealRepository;
 
     @Override
-    public FoodResponse addMeal(Meal meal) {
-        isExist(meal.getMealName());
-        mealRepository.saveAndFlush(meal);
-        return new FoodResponse("meal "+ meal.getMealName()+ "added successfully");
+    public FoodResponse addMeal(MealObject mealObject) {
+        isExist(mealObject.mealName());
+        mealRepository.saveAndFlush(Meal.builder()
+                .mealName(mealObject.mealName())
+                .desc(mealObject.desc())
+                .type(mealObject.type())
+                .price(mealObject.price())
+                .build());
+        return new FoodResponse("meal " + mealObject.mealName() + "added successfully");
     }
 
     private void isExist(String mealName) {
-      var anyMatch =  mealRepository.findAll().stream().anyMatch(meal -> meal.getMealName().equals(mealName));
-      if(anyMatch)throw new MealExistException("meal with "+mealName+" already exist");
-
+        if (mealRepository.findAll().stream().anyMatch(meal -> meal.getMealName().equals(mealName)))
+            throw new MealExistException("meal with " + mealName + " already exist");
     }
 
     @Override
-    public Meal getMeal(Long id) {
-        return mealRepository.findById(id).orElseThrow(
-                ()-> new MealNotFoundException("meal with id {"+id+"} not found")
+    public MealObject getMeal(Long id) {
+        return mealRepository.findById(id).map(meal -> new MealObject(meal.getMealId(), meal.getMealName(),
+                meal.getType(), meal.getDesc(), meal.getPrice())).orElseThrow(
+                () -> new MealNotFoundException("meal with id {" + id + "} not found")
         );
     }
 
     @Override
     public FoodResponse removeMeal(Long mealId) {
         mealRepository.deleteById(mealId);
-        return new FoodResponse("meal with id "+ mealId+ " successfully deleted");
+        return new FoodResponse("meal with id " + mealId + " successfully deleted");
     }
 
     @Override
-    public List<Meal> getAllMeals() {
-        return mealRepository.findAll();
+    public List<MealObject> getAllMeals() {
+        return mealRepository.findAll().stream().map(meal -> new MealObject(meal.getMealId(), meal.getMealName(),
+                meal.getType(), meal.getDesc(), meal.getPrice())).toList();
     }
-    private Meal getMealByName(String name){
-        return mealRepository.findMealByMealName(name);
-    }
+
 
     @Override
-    public FoodResponse orderMeal(String mealName) {
-        Meal meal = getMealByName(mealName);
-
-        return null;
+    public FoodResponse updateMeal(UpdateMealRequest updateMealRequest) {
+        Meal meal = mealRepository.getById(updateMealRequest.mealId());
+        if (isNotNullOrEmpty(updateMealRequest.mealName())) meal.setMealName(updateMealRequest.mealName());
+        if (isNotNullOrEmpty(updateMealRequest.desc())) meal.setDesc(updateMealRequest.desc());
+        if (isNotNullOrEmpty(updateMealRequest.type())) meal.setType(updateMealRequest.type());
+        if (isNotNullOrEmpty(String.valueOf(updateMealRequest.price()))) meal.setPrice(updateMealRequest.price());
+        return new FoodResponse("updated successfully");
     }
 
-    @Override
-    public FoodResponse updateMeal(UpdateMealRequest updateLaundryOrderRequest) {
-        return null;
+
+    private boolean isNotNullOrEmpty(String value) {
+        return value != null && !value.equals("");
     }
 }

@@ -2,6 +2,9 @@ package com.edenlifemock.customer;
 
 import com.edenlifemock.clients.cleaning.CleaningClient;
 import com.edenlifemock.clients.cleaning.CleaningOrderRequest;
+import com.edenlifemock.clients.food.FoodClient;
+import com.edenlifemock.clients.food.FoodResponse;
+import com.edenlifemock.clients.food.OrderFoodRequest;
 import com.edenlifemock.clients.laundry.LaundryClient;
 import com.edenlifemock.clients.laundry.LaundryOrderRequest;
 import com.edenlifemock.clients.notification.NotificationClient;
@@ -26,6 +29,8 @@ public class CustomerService implements iCustomerService {
     private final LaundryClient laundryClient;
 
     private final CleaningClient cleaningClient;
+
+    private final FoodClient foodClient;
 
     @Override
     public NotificationResponse saveCustomer(CustomerRequest customerRequest) {
@@ -80,10 +85,8 @@ public class CustomerService implements iCustomerService {
     }
 
     private void isRegisteredUser(String email) {
-        var anyMatch = customerRepository.findAll()
-                .stream().anyMatch(customer -> customer.getEmail().equalsIgnoreCase(email));
-
-        if(!anyMatch){
+        if (customerRepository.findAll()
+                .stream().noneMatch(customer -> customer.getEmail().equalsIgnoreCase(email))) {
             throw new UnregisteredUserException("Unregistered user,please sign Up with Us");
         }
     }
@@ -98,6 +101,19 @@ public class CustomerService implements iCustomerService {
                 cleaningOrderRequest.customerName(),
                 resp.message(),
                 cleaningOrderRequest.email()
+        ));
+    }
+
+    @Override
+    public NotificationResponse orderMeal(OrderFoodRequest orderFoodRequest) {
+        log.info("ordering food-> {}", orderFoodRequest.email());
+        isRegisteredUser(orderFoodRequest.email());
+        var resp = foodClient.orderMeal(orderFoodRequest.mealName());
+        return notificationClient.sendNotification(new NotificationRequest(
+                orderFoodRequest.customerId(),
+                orderFoodRequest.customerName(),
+                resp.message(),
+                orderFoodRequest.email()
         ));
     }
 

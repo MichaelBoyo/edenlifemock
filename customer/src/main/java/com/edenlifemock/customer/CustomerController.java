@@ -1,6 +1,7 @@
 package com.edenlifemock.customer;
 
 import com.edenlifemock.clients.cleaning.CleaningOrderRequest;
+import com.edenlifemock.clients.food.OrderFoodRequest;
 import com.edenlifemock.clients.laundry.LaundryOrderRequest;
 import com.edenlifemock.clients.notification.NotificationResponse;
 import lombok.AllArgsConstructor;
@@ -22,13 +23,20 @@ public class CustomerController {
 
     @GetMapping("/laundry")
     public NotificationResponse orderLaundry(@RequestBody LaundryOrderRequest laundryOrderRequest){
-        log.info("order in process {}",laundryOrderRequest);
+        log.info("laundry order in process {}",laundryOrderRequest);
         return iCustomerService.orderLaundry(laundryOrderRequest);
     }
 
     @GetMapping("/cleaning")
     NotificationResponse orderCleaning(@RequestBody CleaningOrderRequest cleaningOrderRequest){
-        log.info("order in process {}",cleaningOrderRequest);
+        log.info("cleaning order in process {}",cleaningOrderRequest);
         return iCustomerService.orderCleaning(cleaningOrderRequest);
     }
+
+    @GetMapping("/food")
+    public NotificationResponse orderMeal(@RequestBody OrderFoodRequest orderFoodRequest){
+        log.info("food order in process {}",orderFoodRequest);
+        return iCustomerService.orderMeal(orderFoodRequest);
+    }
+
 }

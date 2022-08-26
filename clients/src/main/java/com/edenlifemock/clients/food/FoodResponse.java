@@ -1,4 +1,4 @@
-package com.edenlifemock.food.dtos;
+package com.edenlifemock.clients.food;
 
 public record FoodResponse(String message) {
 }
