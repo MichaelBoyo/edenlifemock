@@ -11,13 +11,12 @@
         <module name="notification" />
         <module name="clients" />
         <module name="laundry" />
+        <module name="api-gateway" />
         <module name="eureka-server" />
+        <module name="adv-message-queue-protocol" />
         <module name="food" />
         <module name="customer" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="api-gateway" target="18" />
-    </bytecodeTargetLevel>
   </component>
 </project>

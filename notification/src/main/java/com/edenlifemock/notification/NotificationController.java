@@ -19,6 +19,4 @@ public class NotificationController {
         log.info("Sending notification to {}",notificationRequest);
         return new ResponseEntity<>(notificationService.sendNotification(notificationRequest), HttpStatus.OK);
     }
-
-
 }

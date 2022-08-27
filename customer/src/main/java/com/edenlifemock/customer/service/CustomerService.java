@@ -1,4 +1,4 @@
-package com.edenlifemock.customer;
+package com.edenlifemock.customer.service;
 
 import com.edenlifemock.clients.cleaning.CleaningClient;
 import com.edenlifemock.clients.cleaning.CleaningOrderRequest;
@@ -9,6 +9,11 @@ import com.edenlifemock.clients.laundry.LaundryOrderRequest;
 import com.edenlifemock.clients.notification.NotificationClient;
 import com.edenlifemock.clients.notification.NotificationRequest;
 import com.edenlifemock.clients.notification.NotificationResponse;
+import com.edenlifemock.customer.Customer;
+import com.edenlifemock.customer.CustomerRepository;
+import com.edenlifemock.customer.dtos.CustomerRequest;
+import com.edenlifemock.customer.dtos.CustomerResponse;
+import com.edenlifemock.customer.dtos.UpdateCustomerRequest;
 import com.edenlifemock.customer.exceptions.EmailAlreadyExistException;
 import com.edenlifemock.customer.exceptions.UnregisteredUserException;
 import lombok.AllArgsConstructor;

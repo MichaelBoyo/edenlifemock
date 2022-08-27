@@ -1,4 +1,4 @@
-package com.edenlifemock.customer;
+package com.edenlifemock.customer.dtos;
 
 import java.time.LocalDateTime;
 

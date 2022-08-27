@@ -1,10 +1,13 @@
-package com.edenlifemock.customer;
+package com.edenlifemock.customer.service;
 
 import com.edenlifemock.clients.cleaning.CleaningOrderRequest;
-import com.edenlifemock.clients.food.FoodResponse;
 import com.edenlifemock.clients.food.OrderFoodRequest;
 import com.edenlifemock.clients.laundry.LaundryOrderRequest;
 import com.edenlifemock.clients.notification.NotificationResponse;
+import com.edenlifemock.customer.Customer;
+import com.edenlifemock.customer.dtos.CustomerRequest;
+import com.edenlifemock.customer.dtos.CustomerResponse;
+import com.edenlifemock.customer.dtos.UpdateCustomerRequest;
 
 import java.util.List;
 
