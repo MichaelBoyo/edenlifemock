@@ -1,12 +1,12 @@
 package com.edenlifemock.customer.service;
 
+import com.edenlifemock.amqp.RabbitMQMessageProducer;
 import com.edenlifemock.clients.cleaning.CleaningClient;
 import com.edenlifemock.clients.cleaning.CleaningOrderRequest;
 import com.edenlifemock.clients.food.FoodClient;
 import com.edenlifemock.clients.food.OrderFoodRequest;
 import com.edenlifemock.clients.laundry.LaundryClient;
 import com.edenlifemock.clients.laundry.LaundryOrderRequest;
-import com.edenlifemock.clients.notification.NotificationClient;
 import com.edenlifemock.clients.notification.NotificationRequest;
 import com.edenlifemock.clients.notification.NotificationResponse;
 import com.edenlifemock.customer.Customer;
@@ -29,13 +29,14 @@ import java.util.List;
 public class CustomerService implements iCustomerService {
     private final CustomerRepository customerRepository;
 
-    private final NotificationClient notificationClient;
 
     private final LaundryClient laundryClient;
 
     private final CleaningClient cleaningClient;
 
     private final FoodClient foodClient;
+
+    private final RabbitMQMessageProducer rabbitMQMessageProducer;
 
     @Override
     public NotificationResponse saveCustomer(CustomerRequest customerRequest) {
@@ -53,12 +54,19 @@ public class CustomerService implements iCustomerService {
                 .build();
         customerRepository.saveAndFlush(customer);
 
-        return notificationClient.sendNotification(
-                new NotificationRequest(customer.getCustomerId(),
-                        customer.getFirstName() + " " + customer.getLastName(),
-                        "hi " + customer.getFirstName() + " " + customer.getLastName() + " welcome to EdenLife",
-                        customer.getEmail()));
+        NotificationRequest notifiCationRequest = new NotificationRequest(customer.getCustomerId(),
+                customer.getFirstName() + " " + customer.getLastName(),
+                "hi " + customer.getFirstName() + " " + customer.getLastName() + " welcome to EdenLife",
+                customer.getEmail());
 
+        rabbitMQMessageProducer.publish(
+                notifiCationRequest,
+                "internal.exchange",
+                "internal.notification.routing-key"
+        );
+
+        return new NotificationResponse("hi " + customer.getFirstName() + " " +
+                customer.getLastName() + " welcome to EdenLife");
     }
 
     @Override
@@ -90,12 +98,20 @@ public class CustomerService implements iCustomerService {
 
         var resp = laundryClient.createLaundryOrder(laundryOrderRequest);
 
-        return notificationClient.sendNotification(new NotificationRequest(
+        NotificationRequest notifiCationRequest = new NotificationRequest(
                 customer.getCustomerId(),
                 laundryOrderRequest.customerName(),
                 resp.message(),
                 laundryOrderRequest.email()
-        ));
+        );
+
+        rabbitMQMessageProducer.publish(
+                notifiCationRequest,
+                "internal.exchange",
+                "internal.notification.routing-key"
+        );
+
+        return new NotificationResponse("laundry order successful");
     }
 
     private void isRegisteredUser(String email) {
@@ -111,12 +127,19 @@ public class CustomerService implements iCustomerService {
         isRegisteredUser(cleaningOrderRequest.email());
         var customer = customerRepository.findCustomerByEmail(cleaningOrderRequest.email());
         var resp = cleaningClient.createLaundryOrder(cleaningOrderRequest);
-        return notificationClient.sendNotification(new NotificationRequest(
+        NotificationRequest notifiCationRequest = new NotificationRequest(
                 customer.getCustomerId(),
                 cleaningOrderRequest.customerName(),
                 resp.message(),
                 cleaningOrderRequest.email()
-        ));
+        );
+        rabbitMQMessageProducer.publish(
+                notifiCationRequest,
+                "internal.exchange",
+                "internal.notification.routing-key"
+        );
+
+        return new NotificationResponse("ordered successfully");
     }
 
     @Override
@@ -125,12 +148,19 @@ public class CustomerService implements iCustomerService {
         isRegisteredUser(orderFoodRequest.email());
         var customer = customerRepository.findCustomerByEmail(orderFoodRequest.email());
         var resp = foodClient.getMealByName(orderFoodRequest.mealName());
-        return notificationClient.sendNotification(new NotificationRequest(
+        NotificationRequest notifiCationRequest = new NotificationRequest(
                 customer.getCustomerId(),
                 orderFoodRequest.customerName(),
                 resp.message(),
                 orderFoodRequest.email()
-        ));
+        );
+        rabbitMQMessageProducer.publish(
+                notifiCationRequest,
+                "internal.exchange",
+                "internal.notification.routing-key"
+        );
+
+        return new NotificationResponse("meal ordered successfully");
     }
 
 
