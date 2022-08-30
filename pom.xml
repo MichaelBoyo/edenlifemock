@@ -19,6 +19,8 @@
         <module>laundry</module>
         <module>cleaning</module>
         <module>food</module>
+        <module>api-gateway</module>
+        <module>adv-message-queue-protocol</module>
     </modules>
 
     <name>edenlifemock</name>

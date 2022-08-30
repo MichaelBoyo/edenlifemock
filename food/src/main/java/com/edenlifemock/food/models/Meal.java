@@ -3,7 +3,6 @@ package com.edenlifemock.food.models;
 import lombok.*;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 
 @Entity
 @Getter
@@ -24,6 +23,6 @@ public class Meal {
     private Long mealId;
     private String mealName;
     private String type;
-    private String desc;
-    private BigDecimal price;
+    private String description;
+    private Double price;
 }

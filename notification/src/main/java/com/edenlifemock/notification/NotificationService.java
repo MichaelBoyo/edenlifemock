@@ -5,6 +5,8 @@ import com.edenlifemock.clients.notification.NotificationResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @AllArgsConstructor
 public class NotificationService {
@@ -16,6 +18,7 @@ public class NotificationService {
                 .toCustomerId(notificationRequest.customerId())
                 .toCustomerEmail(notificationRequest.email())
                 .sender("EdenLife")
+                .sentAt(LocalDateTime.now())
                 .build();
       notificationRepository.saveAndFlush(notification);
 

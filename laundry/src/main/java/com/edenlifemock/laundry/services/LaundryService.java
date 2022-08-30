@@ -23,6 +23,7 @@ public class LaundryService implements iLaundryService{
                 .address(laundryOrderRequest.address())
                 .noOfClothing(laundryOrderRequest.noOfClothing())
                 .customerName(laundryOrderRequest.customerName())
+                .phoneNumber(laundryOrderRequest.phone())
                 .price(calculateLaundryPrice(laundryOrderRequest.noOfClothing()))
                 .build();
         laundryOrderRepository.saveAndFlush(laundryOrder);
