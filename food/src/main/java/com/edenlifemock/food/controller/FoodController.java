@@ -1,4 +1,4 @@
-package com.edenlifemock.food;
+package com.edenlifemock.food.controller;
 
 import com.edenlifemock.clients.food.FoodResponse;
 import com.edenlifemock.clients.food.MealObject;

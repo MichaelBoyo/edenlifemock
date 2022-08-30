@@ -1,4 +1,4 @@
-package com.edenlifemock.food;
+package com.edenlifemock.food.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

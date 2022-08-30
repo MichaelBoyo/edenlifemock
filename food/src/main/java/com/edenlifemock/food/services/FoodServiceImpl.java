@@ -3,7 +3,9 @@ package com.edenlifemock.food.services;
 import com.edenlifemock.clients.food.FoodResponse;
 import com.edenlifemock.clients.food.MealObject;
 import com.edenlifemock.clients.food.UpdateMealRequest;
-import com.edenlifemock.food.MealRepository;
+import com.edenlifemock.food.exceptions.MealExistException;
+import com.edenlifemock.food.exceptions.MealNotFoundException;
+import com.edenlifemock.food.repositories.MealRepository;
 
 import com.edenlifemock.food.models.Meal;
 import lombok.AllArgsConstructor;
@@ -76,6 +78,10 @@ public class FoodServiceImpl implements FoodService {
         return new FoodResponse(mealObject+ " ordered successfully");
     }
 
+    @Override
+    public Meal findMealByMealName(String mealName) {
+        return mealRepository.findMealByMealName(mealName);
+    }
 
     private boolean isNotNullOrEmpty(String value) {
         return value != null && !value.equals("");

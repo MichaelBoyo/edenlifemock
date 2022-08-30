@@ -1,4 +1,4 @@
-package com.edenlifemock.food;
+package com.edenlifemock.food.repositories;
 
 import com.edenlifemock.food.models.Meal;
 import org.springframework.data.jpa.repository.JpaRepository;
