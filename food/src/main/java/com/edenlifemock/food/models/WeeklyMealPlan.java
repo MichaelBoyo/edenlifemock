@@ -11,17 +11,17 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DailyMealPlan {
+public class WeeklyMealPlan {
     @Id
     @SequenceGenerator(
-            name = "daily_meal_plan_id_sequence",
-            sequenceName = "meal_plan_id_sequence"
+            name = "weekly_meal_plan_id_sequence",
+            sequenceName = "weekly_meal_plan_id_sequence"
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "daily_meal_plan_id_sequence"
+            generator = "weekly_meal_plan_id_sequence"
     )
-    private Long dailyMealPlanId;
+    private Long weeklyMealPlanId;
     @ElementCollection
-    private List<MealPlan> dailyMealPLan;
+    private List<MealPlan> mealPLans;
 }

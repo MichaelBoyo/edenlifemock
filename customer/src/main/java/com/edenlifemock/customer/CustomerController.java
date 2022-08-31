@@ -1,6 +1,7 @@
 package com.edenlifemock.customer;
 
 import com.edenlifemock.clients.cleaning.CleaningOrderRequest;
+import com.edenlifemock.clients.food.MealPlanRequest;
 import com.edenlifemock.clients.food.OrderFoodRequest;
 import com.edenlifemock.clients.laundry.LaundryOrderRequest;
 import com.edenlifemock.clients.notification.NotificationResponse;
@@ -23,6 +24,11 @@ public class CustomerController {
     public NotificationResponse registerUser(@RequestBody CustomerRequest customerRequest){
         log.info("registering customer {}",customerRequest);
         return iCustomerService.saveCustomer(customerRequest);
+    }
+    @GetMapping("/order-plan")
+    public NotificationResponse orderWeeklyMealPlan(@RequestBody MealPlanRequest request){
+        log.info("ordering weekly meal plan {}",request);
+        return iCustomerService.orderWeeklyMealPlan(request);
     }
 
     @GetMapping

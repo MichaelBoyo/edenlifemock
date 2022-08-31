@@ -4,6 +4,7 @@ import com.edenlifemock.amqp.RabbitMQMessageProducer;
 import com.edenlifemock.clients.cleaning.CleaningClient;
 import com.edenlifemock.clients.cleaning.CleaningOrderRequest;
 import com.edenlifemock.clients.food.FoodClient;
+import com.edenlifemock.clients.food.MealPlanRequest;
 import com.edenlifemock.clients.food.OrderFoodRequest;
 import com.edenlifemock.clients.laundry.LaundryClient;
 import com.edenlifemock.clients.laundry.LaundryOrderRequest;
@@ -59,11 +60,7 @@ public class CustomerService implements iCustomerService {
                 "hi " + customer.getFirstName() + " " + customer.getLastName() + " welcome to EdenLife",
                 customer.getEmail());
 
-        rabbitMQMessageProducer.publish(
-                notifiCationRequest,
-                "internal.exchange",
-                "internal.notification.routing-key"
-        );
+        publisher(notifiCationRequest);
 
         return new NotificationResponse("hi " + customer.getFirstName() + " " +
                 customer.getLastName() + " welcome to EdenLife");
@@ -105,11 +102,7 @@ public class CustomerService implements iCustomerService {
                 laundryOrderRequest.email()
         );
 
-        rabbitMQMessageProducer.publish(
-                notifiCationRequest,
-                "internal.exchange",
-                "internal.notification.routing-key"
-        );
+        publisher(notifiCationRequest);
 
         return new NotificationResponse("laundry order successful");
     }
@@ -133,11 +126,7 @@ public class CustomerService implements iCustomerService {
                 resp.message(),
                 cleaningOrderRequest.email()
         );
-        rabbitMQMessageProducer.publish(
-                notifiCationRequest,
-                "internal.exchange",
-                "internal.notification.routing-key"
-        );
+        publisher(notifiCationRequest);
 
         return new NotificationResponse("ordered successfully");
     }
@@ -154,13 +143,33 @@ public class CustomerService implements iCustomerService {
                 resp.message(),
                 orderFoodRequest.email()
         );
+        publisher(notifiCationRequest);
+
+        return new NotificationResponse("meal ordered successfully");
+    }
+
+    private void publisher(NotificationRequest notifiCationRequest) {
         rabbitMQMessageProducer.publish(
                 notifiCationRequest,
                 "internal.exchange",
                 "internal.notification.routing-key"
         );
+    }
 
-        return new NotificationResponse("meal ordered successfully");
+    @Override
+    public NotificationResponse orderWeeklyMealPlan(MealPlanRequest request) {
+        var resp = foodClient.orderWeeklyMealPlan(request);
+        var customer = customerRepository.findCustomerByEmail(request.email());
+
+        customerRepository.saveAndFlush(customer);
+        NotificationRequest notifiCationRequest = new NotificationRequest(
+                customer.getCustomerId(),
+                customer.getFirstName(),
+                resp.toString(),
+                request.email()
+        );
+        publisher(notifiCationRequest);
+        return new NotificationResponse("weekly meal ordered successfully");
     }
 
 

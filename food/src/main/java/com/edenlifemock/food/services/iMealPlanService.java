@@ -1,10 +1,16 @@
 package com.edenlifemock.food.services;
 
-import com.edenlifemock.food.dtos.MealPLanRequest;
-import com.edenlifemock.food.models.DailyMealPlan;
-import com.edenlifemock.food.models.MealPlan;
+import com.edenlifemock.clients.food.MealPlanObject;
+import com.edenlifemock.clients.food.MealPlanRequest;
+import com.edenlifemock.clients.food.WeeklyMealPlanObject;
+
+import java.util.List;
+
 
 public interface iMealPlanService {
-    MealPlan orderMealPlan(MealPLanRequest mealPLanRequest);
-    DailyMealPlan orderDailyMealPlan(MealPLanRequest mealPLanRequest);
+    MealPlanObject orderMealPlan(MealPlanRequest mealPLanRequest);
+    WeeklyMealPlanObject orderWeeklyMealPlan(MealPlanRequest mealPLanRequest);
+
+    List<WeeklyMealPlanObject> findAllWeeklyMealPlan();
+
 }

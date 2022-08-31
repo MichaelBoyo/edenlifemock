@@ -4,7 +4,7 @@ import com.edenlifemock.clients.food.FoodResponse;
 import com.edenlifemock.clients.food.MealObject;
 import com.edenlifemock.clients.food.UpdateMealRequest;
 
-import com.edenlifemock.food.models.Meal;
+
 import com.edenlifemock.food.services.FoodService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
