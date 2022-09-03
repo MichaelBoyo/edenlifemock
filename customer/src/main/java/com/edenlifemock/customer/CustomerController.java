@@ -7,8 +7,10 @@ import com.edenlifemock.clients.laundry.LaundryOrderRequest;
 import com.edenlifemock.clients.notification.NotificationResponse;
 import com.edenlifemock.customer.dtos.CustomerRequest;
 import com.edenlifemock.customer.dtos.CustomerResponse;
+import com.edenlifemock.customer.service.iCustomerService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,13 +20,14 @@ import java.util.List;
 @AllArgsConstructor
 @Slf4j
 public class CustomerController {
-    private final com.edenlifemock.customer.service.iCustomerService iCustomerService;
+    private final iCustomerService iCustomerService;
 
     @PostMapping
     public NotificationResponse registerUser(@RequestBody CustomerRequest customerRequest){
         log.info("registering customer {}",customerRequest);
         return iCustomerService.saveCustomer(customerRequest);
     }
+
     @GetMapping("/order-plan")
     public NotificationResponse orderWeeklyMealPlan(@RequestBody MealPlanRequest request){
         log.info("ordering weekly meal plan {}",request);
@@ -55,5 +58,10 @@ public class CustomerController {
         return iCustomerService.orderMeal(orderFoodRequest);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @DeleteMapping
+    public NotificationResponse deleteAllUsers( ){
+        return iCustomerService.deleteAllCustomers();
+    }
 
 }

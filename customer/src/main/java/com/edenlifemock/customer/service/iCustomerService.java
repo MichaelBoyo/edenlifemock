@@ -28,4 +28,7 @@ public interface iCustomerService {
 
     NotificationResponse orderWeeklyMealPlan(MealPlanRequest request);
 
+    NotificationResponse deleteAllCustomers();
+
+
 }

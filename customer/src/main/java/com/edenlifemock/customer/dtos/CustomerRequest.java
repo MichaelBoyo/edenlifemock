@@ -4,6 +4,10 @@ public record CustomerRequest(
         String email,
         String password,
         String firstName,
-        String lastName
+        String lastName,
+        String role,
+        String username
 ) {
 }
+
+

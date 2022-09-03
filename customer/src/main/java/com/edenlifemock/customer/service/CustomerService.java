@@ -14,15 +14,20 @@ import com.edenlifemock.customer.Customer;
 import com.edenlifemock.customer.CustomerRepository;
 import com.edenlifemock.customer.dtos.CustomerRequest;
 import com.edenlifemock.customer.dtos.CustomerResponse;
+import com.edenlifemock.customer.dtos.Role;
 import com.edenlifemock.customer.dtos.UpdateCustomerRequest;
 import com.edenlifemock.customer.exceptions.EmailAlreadyExistException;
 import com.edenlifemock.customer.exceptions.UnregisteredUserException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.edenlifemock.customer.dtos.Role.ADMIN;
+import static com.edenlifemock.customer.dtos.Role.USER;
 
 @Service
 @AllArgsConstructor
@@ -30,7 +35,7 @@ import java.util.List;
 public class CustomerService implements iCustomerService {
     private final CustomerRepository customerRepository;
 
-
+    private final PasswordEncoder passwordEncoder;
     private final LaundryClient laundryClient;
 
     private final CleaningClient cleaningClient;
@@ -50,9 +55,13 @@ public class CustomerService implements iCustomerService {
                 .firstName(customerRequest.firstName())
                 .lastName(customerRequest.lastName())
                 .email(customerRequest.email())
-                .password(customerRequest.password())
+                .username(customerRequest.username())
+                .password(passwordEncoder.encode(customerRequest.password()))
                 .dateRegistered(LocalDateTime.now())
                 .build();
+        if (customerRequest.role().equals("admin"))customer.addRole(ADMIN);
+
+        customer.addRole(USER);
         customerRepository.saveAndFlush(customer);
 
         NotificationRequest notifiCationRequest = new NotificationRequest(customer.getCustomerId(),
@@ -171,6 +180,13 @@ public class CustomerService implements iCustomerService {
         publisher(notifiCationRequest);
         return new NotificationResponse("weekly meal ordered successfully");
     }
+
+    @Override
+    public NotificationResponse deleteAllCustomers() {
+        customerRepository.deleteAll();
+        return new NotificationResponse("all users deleted successfully");
+    }
+
 
 
 }
